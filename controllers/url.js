@@ -1,6 +1,18 @@
 const shortid = require('shortid')
 const URL = require('../models/url')
 
+async function handleAllUrls(req, res) {
+   const allUrls = await URL.find({});
+   return res.end(`
+   <html>
+      <body>
+         <ol>
+         ${allUrls.map(url => `<li>${url.shortId} - ${url.redirectURL} - ${url.visitHistory.length}</li>`).join("")}
+         </ol>
+      </body>
+   </html>`)
+}
+
 async function handleGenerateNewShortURL(req, res) {
    // console.log("function first line");
    const body = req.body;
@@ -44,6 +56,8 @@ async function handleShortURL(req, res) {
    }
 };
 
+
+
 async function handleAnalytics(req, res) {
    const shortId = req.params.shortId;
    const result = await URL.findOne({ shortId })
@@ -59,4 +73,4 @@ async function handleDeleteShortId(req, res) {
    await URL.findByIdAndDelete(req.params.id);
    return res.status(400).json({ status: 'deleted' })
 }
-module.exports = { handleGenerateNewShortURL, handleShortURL, handleAnalytics, handleDeleteShortId };
+module.exports = { handleGenerateNewShortURL, handleShortURL, handleAnalytics, handleDeleteShortId, handleAllUrls };
