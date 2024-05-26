@@ -11,7 +11,7 @@ async function handleAllUrls(req, res) {
          </ol>
       </body>
    </html>`)
-}
+} 
 
 async function handleGenerateNewShortURL(req, res) {
    // console.log("function first line");
@@ -40,7 +40,7 @@ async function handleShortURL(req, res) {
                }
             }
          },
-         { new: true } // This option returns the modified document
+         { new: true } 
       );
 
       if (entry) {
