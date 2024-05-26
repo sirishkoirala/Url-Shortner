@@ -11,12 +11,10 @@ async function handleAllUrls(req, res) {
          </ol>
       </body>
    </html>`)
-} 
+}
 
 async function handleGenerateNewShortURL(req, res) {
-   // console.log("function first line");
    const body = req.body;
-   // console.log(body);
    if (!body.url) return res.status(400).json({ error: "url is required" });
    const shortID = shortid();
    await URL.create({
@@ -24,8 +22,10 @@ async function handleGenerateNewShortURL(req, res) {
       redirectURL: body.url,
       visitHistory: [],
    });
-   // console.log("hello from controller");
-   return res.json({ id: shortID });
+   return res.render("home", {
+      id: shortID
+   })
+   // return res.json({ id: shortID });
 }
 async function handleShortURL(req, res) {
    const shortId = req.params.shortId;
@@ -40,7 +40,7 @@ async function handleShortURL(req, res) {
                }
             }
          },
-         { new: true } 
+         { new: true }
       );
 
       if (entry) {
@@ -73,4 +73,9 @@ async function handleDeleteShortId(req, res) {
    await URL.findByIdAndDelete(req.params.id);
    return res.status(400).json({ status: 'deleted' })
 }
-module.exports = { handleGenerateNewShortURL, handleShortURL, handleAnalytics, handleDeleteShortId, handleAllUrls };
+
+async function handleWebPage(req, res) {
+   const allUrls = await URL.find({})
+   return res.render("home", { urls: allUrls });
+}
+module.exports = { handleGenerateNewShortURL, handleShortURL, handleAnalytics, handleDeleteShortId, handleAllUrls, handleWebPage };
