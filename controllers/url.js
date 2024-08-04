@@ -69,10 +69,18 @@ async function handleAnalytics(req, res) {
 
 
 async function handleDeleteShortId(req, res) {
-   console.log(req.params.shortId);
-   await URL.findByIdAndDelete(req.params.id);
-   return res.status(400).json({ status: 'deleted' })
+   try {
+      const deletedURL = await URL.findOneAndDelete({ shortId: req.params.shortId });
+      if (!deletedURL) {
+         return res.status(404).json({ status: 'not found' });
+      }
+      return res.status(200).json({ status: 'deleted' });
+   } catch (error) {
+      console.error(error);
+      return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+   }
 }
+
 
 async function handleWebPage(req, res) {
    const allUrls = await URL.find({})

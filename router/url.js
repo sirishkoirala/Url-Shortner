@@ -1,5 +1,5 @@
 const express = require('express')
-const { handleGenerateNewShortURL, handleShortURL, handleAnalytics, handleAllUrls, handleWebPage } = require("./../controllers/url");
+const { handleGenerateNewShortURL, handleShortURL, handleAnalytics, handleAllUrls, handleWebPage, handleDeleteShortId } = require("./../controllers/url");
 const router = express.Router();
 
 router.post("/", handleGenerateNewShortURL);
@@ -13,6 +13,6 @@ router.get("/test", handleWebPage)
 router.get("/analytics/:shortId", handleAnalytics)
 
 
-// router.delete("/:shortId", handleDeleteShortId)
+router.delete("/id/:shortId", handleDeleteShortId)
 
 module.exports = router;
